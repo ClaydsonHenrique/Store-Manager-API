@@ -7,7 +7,7 @@ const salesController = require('../../../src/controllers/sales.controller');
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe('Sales Controller Tests:', function () {
+describe('Sales Controller Testes', function () {
   afterEach(function () {
     sinon.restore();
   });
@@ -30,7 +30,7 @@ describe('Sales Controller Tests:', function () {
     expect(res.status).to.have.been.calledWith(200);
   });
 
-  it('pega uma venda pelo ID ', async function () {
+  it('pega uma venda pelo ID', async function () {
     sinon.stub(salesService, 'getSalesIdServices').resolves();
 
     const { req, res } = createMockRequestAndResponse();
@@ -41,7 +41,7 @@ describe('Sales Controller Tests:', function () {
     expect(res.status).to.have.been.calledWith(200);
   });
 
-  it('retorna o status 404 com ID inexistente ', async function () {
+  it('retorna o status 404 com ID inexistente', async function () {
     sinon.stub(salesService, 'getSalesIdServices').resolves();
 
     const { req, res } = createMockRequestAndResponse();
@@ -50,5 +50,21 @@ describe('Sales Controller Tests:', function () {
     await salesController.getSaleId(req, res);
 
     expect(res.status).to.have.been.calledWith(404);
+  });
+  it('testando função delete', async function () {
+    const res = {};
+    const req = {
+      params: {
+        id: 100,
+      },
+    };
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+
+    sinon.stub(salesService, 'deleteServiceId').resolves(null);
+    await salesController.deleteSale(req, res);
+    expect(res.status.calledWith(404)).to.be.equal(true);
+    expect(res.json.calledWith({ message: 'Sale not found' })).to.be.equal(true);
   });
 });

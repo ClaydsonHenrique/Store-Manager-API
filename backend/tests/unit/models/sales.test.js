@@ -13,7 +13,7 @@ describe('Sales', function () {
       chai
         .request(app)
         .get('/sales')
-        .end((_err, res) => {
+        .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           done();

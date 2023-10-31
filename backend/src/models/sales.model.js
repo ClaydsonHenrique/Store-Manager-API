@@ -45,8 +45,20 @@ const postSalesModels = async (saleData) => {
   return saleObject;
 };
 
+const deleteSaleById = async (id) => {
+  const query = 'DELETE FROM sales WHERE id = ?';
+  const [result] = await connection.execute(query, [id]);
+
+  if (result.affectedRows === 0) {
+    return null;
+  }
+
+  return { id };
+};
+
 module.exports = {
   getAllSales,
   getSalesById,
   postSalesModels,
+  deleteSaleById,
 };

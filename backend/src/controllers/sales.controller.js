@@ -1,4 +1,5 @@
-const { getSalesServices, getSalesIdServices, addSale } = require('../services/sales.service');
+const { getSalesServices, getSalesIdServices,
+  addSale, deleteServiceId } = require('../services/sales.service');
 
 const getSales = async (req, res) => {
   const resp = await getSalesServices();
@@ -22,8 +23,19 @@ const salePost = async (req, res) => {
   return res.status(404).json({ message: 'Product not found' });
 };
 
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+  const sale = await deleteServiceId(id);
+
+  if (!sale) {
+    return res.status(404).json({ message: 'Sale not found' });
+  }
+  res.status(204).end();
+};
+
 module.exports = {
   getSales,
   getSaleId,
   salePost,
+  deleteSale,
 };

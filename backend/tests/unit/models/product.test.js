@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const connection = require('../../../src/models/connection');
-const { getAllProducts, getProductById, postProduct, updateProductById } = require('../../../src/models/product.model');
+const { getAllProducts, getProductById, postProduct, updateProductById, deleteProductById } = require('../../../src/models/product.model');
 
 describe('testando a camada model', function () {
   afterEach(function () {
@@ -56,5 +56,17 @@ describe('testando a camada model', function () {
       name: newProduct.name,
     };
     expect(result).to.be.deep.equal(expectNewObject);
+  });
+  it('testando model de exclusão de produto por id', async function () {
+    const id = 1;
+    const expectedResponse = {
+      affectedRows: 1,
+    };
+
+    sinon.stub(connection, 'execute').resolves([expectedResponse]);
+
+    const result = await deleteProductById(id);
+
+    expect(result).to.be.deep.equal({ id });
   });
 });
