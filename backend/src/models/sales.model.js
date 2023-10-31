@@ -24,7 +24,29 @@ const getSalesById = async (id) => {
   return resp;
 };
 
+const postSalesModels = async (saleData) => {
+  const querySales = 'INSERT INTO StoreManager.sales (date) VALUES (current_timestamp());';
+  const [resp] = await connection.execute(querySales);
+  const { insertId } = resp;
+  await Promise.all(saleData.map(async (saleIndex) => {
+    const { productId, quantity } = saleIndex;
+    const queryInsert = `
+      INSERT INTO StoreManager.sales_products
+    (sale_id, product_id, quantity)
+    VALUES
+      (?,?,?);`;
+    await connection.execute(queryInsert, [insertId, productId, quantity]);
+    return saleIndex;
+  }));
+  const saleObject = {
+    id: insertId,
+    itemsSold: saleData,
+  };
+  return saleObject;
+};
+
 module.exports = {
   getAllSales,
   getSalesById,
+  postSalesModels,
 };
